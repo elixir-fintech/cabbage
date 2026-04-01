@@ -56,7 +56,7 @@ defmodule Cabbage.Feature do
   For example, if you want to match on a number:
 
       # NOTICE THE `number` VARIABLE IS STILL A STRING!!
-      defgiven ~r/^there (is|are) (?<number>\d+) widget(s?)$/, %{number: number}, _state do
+      defgiven ~r/^there (is|are) (?<number>\\d+) widget(s?)$/, %{number: number}, _state do
         assert String.to_integer(number) >= 1
       end
 
@@ -232,7 +232,9 @@ defmodule Cabbage.Feature do
 
           name =
             ExUnit.Case.register_test(
-              __ENV__,
+              __MODULE__,
+              __ENV__.file,
+              __ENV__.line,
               :scenario,
               scenario.name,
               tags
@@ -390,6 +392,6 @@ defmodule Cabbage.Feature do
       end
   """
   defmacro tag(tag, do: block) do
-    add_tag(__CALLER__.module, Macro.to_string(tag) |> String.replace(~r/\s*/, ""), block)
+    add_tag(__CALLER__.module, Macro.to_string(tag) |> String.replace(~r/\\s*/, ""), block)
   end
 end
